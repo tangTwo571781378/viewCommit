@@ -1,0 +1,302 @@
+<div id="home">
+    <!-- 这个div元素限制整体栅格布局的宽度 -->
+    <div class="outerdiv">
+    	<div class="row">
+	    	<div class="col-sm-3">
+	    		<!-- 这个div元素里存放三个div元素 -->
+	    		<div class="onediv bg-white">
+	    			<!-- 这是一个圆 -->
+	    		   	<div class="yuandiv bg-green">
+	    		   		<!-- 放置一个字体图标 -->
+	    		   		<i class="iconfont icon-yun"></i>
+	    		   	</div>
+	    		   	<div class="numdiv">
+	    		   		<span>99.9%</span>
+	    		   		<!-- small标签是指小型文本，类似于副标题 -->
+	    		   		<small>SERVER UPTIME</small>
+	    		   	</div>
+	    		</div>
+	    		<div class="onediv bg-white">
+	    			<!-- 这是一个圆 -->
+	    			<div class="yuandiv bg-zise">
+	    				<!-- 放置一个字体图标 -->
+	    				<i class="iconfont icon-user"></i>
+	    			</div>
+	    			<div class="numdiv">
+	    		   		<span>117k</span>
+	    		   		<!-- small标签是指小型文本，类似于副标题 -->
+	    		   		<small>SERVER UPTIME</small>
+	    		   	</div>
+	    		</div>
+	    		<div class="onediv bg-white">
+	    			<!-- 这是一个圆 -->
+	    			<div class="yuandiv bg-skyblur">
+	    				<!-- 放置一个字体图标 -->
+	    				<i class="iconfont icon-18"></i>
+	    			</div>
+	    			<div class="numdiv">
+	    		   		<span>12470</span>
+	    		   		<!-- small标签是指小型文本，类似于副标题 -->
+	    		   		<small>SERVER UPTIME</small>
+	    		   	</div>
+	    		</div>
+	    	</div>
+	    	<!-- 绘制图形 -->
+	    	<div class="col-sm-5 ">
+	    		<div class="tufloat">
+					<h4>14.85%</h4>
+					<small style="color:black">More Visitors</small>
+				</div>
+	    		<div class="tuxingone bg-white" id="one"></div>
+	    	</div>
+	    	<div class="col-sm-4">
+	    	    <div class="coltop">
+	    	    	<div class="tufloat">
+						<h4 style="color:#7C30BC">95.8</h4>
+						<small style="color:black">More Visitors</small>
+					</div>
+					<div class="topdiv bg-white" id="two"></div>
+	    	    </div>
+				<div class="topdiv bg-white">
+					<div id="three"></div>
+					<div class="tufloat tufloat1">
+						<h4>30247</h4>
+						<small style="color:black">More Visitors</small>
+					</div>
+	    	    </div>
+	    	</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-5">
+        		<div class="bot bg-white" id="four"></div>
+        	</div>
+        	<div class="col-sm-7">
+        		<div class="bot bg-white" id="five"></div>
+        	</div>
+        </div>		
+    </div>
+</div>
+
+<script>
+//变量提升  所有的函数和变量的声明都会提前到代码第一行，并且变量提升在函数之前
+/*			var a;
+			function a(){}*/
+		//	console.log(a);
+		//  var a = 1;
+		//  function a(){}
+		//  console.log(a);
+	$(function(){
+		drawbig();
+		drawtwo();
+		drawthree();
+		
+		//绘制直线
+	   function drawbig(){
+		   		var chart = Highcharts.chart('one', {
+				plotOptions: {
+					series: {
+						label: {
+							connectorAllowed: false
+						},
+						pointStart: 2010
+					}
+				},
+				title:{
+					text:''
+				},
+				credits:{
+					enabled:false,
+				},
+				legend: {
+					floating:true,
+					layout: 'vertical',
+					align: 'right',
+					verticalAlign: 'top'
+				},
+				colors:['#65BA0B','#ccc'],
+				plotOptions: {
+					series: {
+						label: {
+							connectorAllowed: false
+						},
+						pointStart: 2010
+					}
+				},
+				series: [{
+					name: 'PageViews',
+					data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175,43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+				}, {
+					name: 'Visitors',
+					data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434,24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+				}],
+				yAxis:{
+					visible:false
+				},
+				xAxis:{
+					visible:false
+				}
+			});
+	   }
+	   //绘制柱状图
+	   function drawtwo(){
+	   Highcharts.chart('two', {
+				credits:{enabled:false},
+				colors:['#7C30BC'],
+				chart: {
+					//x,y轴是有默认坐标的，不会紧贴我们的放置元素的边缘，因此当我们需要坐标轴从放置元素的左下角为（0，0）坐标开始时就需要设置margin:[top,right,bottom,left]的值，与此同时我们也可以通过设置margin的值来改变x,y轴的y原点坐标位置
+					margin:[0,0,0,0],
+					type: 'column'
+				},
+				title: {
+					text: ''
+				},
+				subtitle: {
+					text: ''
+				},
+				xAxis: {
+					visible:false
+				},
+				yAxis: {
+					visible:false
+				},
+				legend: {
+					enabled: false
+				},
+				plotOptions: {
+					series: {
+						borderWidth: 0,
+						dataLabels: {
+							format: '{point.y:.1f}%'
+						}
+					}
+				},
+				series: [{
+					name: 'Uptime',
+					colorByPoint: true,
+					data:[29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4,29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6]
+				}]
+			});
+	   }
+	   function drawthree (){
+	   	var chart = Highcharts.chart('three', {
+				colors:['#286913','#377720','#82C470','#5B9C47','#B5F5A3'],
+				chart: {
+					spacing : [0, 0 , 0, 0]
+				},
+				title: {
+					floating:true,
+					text: ''
+				},
+				credits:{
+					enabled:false
+				},
+				plotOptions: {
+					pie: {
+						allowPointSelect: true,
+						cursor: 'pointer',
+						dataLabels: {
+							enabled: false,
+							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+						},
+					}
+				},
+				series: [{
+					type: 'pie',
+					innerSize: '50%',
+					data: [10.5,11,2,8.4,1.2,5.4,8,0.5
+						  ]
+				}]
+			});
+	   }
+	});
+</script>
+<style>
+    *,h4{
+    	margin: 0;
+    	padding: 0;
+    }
+	#home{
+		color: red;
+	}
+	.bg-white{
+		background-color: white;
+	}
+	.bg-green{
+		background-color:#65BA0B;
+	}
+	.bg-zise{
+		background-color:#7A31BC;
+	}
+	.bg-skyblur{
+		background-color:#39B9E8;
+	}
+	.outerdiv{
+		width:99%;
+		margin:0 auto;
+		margin-top: 15px;
+		color:black;
+	}
+	.outerdiv .onediv{
+		width:98%;
+		margin: 0 10px 15px 0;
+		padding: 10px;
+	}
+	.outerdiv .onediv:after{
+		content:"";
+		clear: both;
+		display: block;
+	}
+	.outerdiv .onediv i{
+		color: white;
+		font-size: 24px;
+		font-weight: bold;
+	}
+	.outerdiv .onediv>.yuandiv{
+		width:40px;
+		float: left;
+		height: 40px;
+		border-radius: 50%;
+		line-height: 40px;
+		text-align: center;
+	}
+	.outerdiv .numdiv{
+		float: left;
+		margin-left: 30px;
+		text-align: center;
+	}
+	.outerdiv .numdiv span{
+		font-size: 24px;
+		line-height: 22px;
+	}
+    .outerdiv .numdiv small{
+		display: block;
+	}
+    .outerdiv .tuxingone{
+    	height: 216px;
+    }
+    .outerdiv .bot{
+    	height: 300px;
+    }
+  .tufloat{
+		position: absolute;
+      	z-index: 2;
+      	color: #65BA0B;
+      	left: 6%;
+      	top:7%;
+    }
+    .topdiv{
+    	margin:0 25px 15px 0;
+        height: 100px;
+    }
+    #three{
+    	float: right;
+		width:150px;
+		height:100px;
+		margin-right: 20px;
+		
+    }
+    .tufloat1{
+      	top:57%;
+    }
+    .
+</style>

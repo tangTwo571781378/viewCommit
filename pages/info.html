@@ -1,0 +1,347 @@
+<div id="info">
+	<div class="optionDiv">
+		<select name="cate" id="">
+		<!-- 保存的栏目信息，去后台获取栏目信息，追加option节点到这里 -->
+		</select>		
+		<button class="btn btn-sm btn-success addbtn">新 增</button>
+		<button class="btn btn-sm btn-success delbtn">批量 删除</button>
+	</div>
+	<table class="table table-bordered text-center">
+		<tr>
+	 		<td>编号</td>
+	 		<td>文章标题</td>
+	 		<td>所属栏目</td>
+	 		<td>列表方式</td>
+	 		<td>作者</td>
+	 		<td>发布时间</td>
+	 		<td>阅读次数</td>
+	 		<td>操作</td>
+     	</tr>
+     <!-- 	<tr>
+	 		<td>
+	 			<input type="checkbox" value="">
+	 		</td>
+	 		<td>文章标题</td>
+	 		<td>所属栏目</td>
+	 		<td>背景音乐</td>
+	 		<td>作者</td>
+	 		<td>发布时间</td>
+	 		<td>阅读次数</td>
+	 		<td>
+	 			<i class="iconfont icon-edit-1-copy" title="修改"></i>
+	 			<i class="iconfont icon-shanchu" title="删除"></i>
+	 		</td>
+     	</tr> -->
+	</table>
+	<div class="modal" id="infomodal">
+	 	<div class="modal-dialog">
+	 		<div class="modal-content">
+	 			<div class="modal-header text-center">
+	 				<div class="backdiv">
+	 					<i class="iconfont icon-zuo"></i>
+	    				<span>返回</span>
+	 				</div>
+	 				<div class="modal-title ">
+	 					发布资讯
+	 				</div>
+	 			</div>
+	 			<div class="modal-body">
+	 				<form action="">
+	 					<div class="form-group">
+	 						<label for="title">标题</label>
+	 						<input type="text" value="" id="title" name="title" class="form-control">
+	 					</div>
+	 					<div class="form-group">
+	 						<label for="category">所属栏目</label>
+	 						<select name="category" id="category" class="form-control" >
+	 						</select>
+	 					</div>
+	 					<div class="form-group">
+	 					    <label for="">列表样式</label>
+	 					    <div class="radio">
+									 <label for="infoList">
+									 	<input type="radio" value="style-one" id="style-one" name="infoList">
+                                        <img src="./images/style-one.jpg" alt="样式1">
+									 </label>
+									 <label for="infoList">
+									 	<input type="radio" value="style-two" id="style-two" name="infoList">
+                                        <img src="./images/style-two.jpg" alt="样式1">
+									 </label>						    	
+	 					    </div>
+	 					</div>
+	 					<div class="form-group">
+	 						<label for="">正文</label>
+	 						<textarea name="infoContent" id="" cols="30" rows="6" class="form-control"></textarea>
+	 					</div>
+	 					<div class="form-group hide">
+							<button type="reset">重置</button>
+						</div>
+	 				</form>
+	 			</div>
+	 			<div class="modal-footer">
+	 				<span class="messageSpan"></span>
+					<button class="btn btn-success btn-sm savebtn">发 布</button>
+	 			</div>
+	 		</div>
+	 	</div>
+	 </div>
+</div>
+<script>
+	$(function(){
+		var articles;
+		var option;
+		var map;
+		//栏目id
+		var currentCId='';
+		//文章id
+		var artid;
+		$('.modal-content').height($(window).height());
+		//获取所有的栏目信息，追加节点到select中，默认显示第一个栏目的值
+		addCategoryId();
+		function addCategoryId(){
+			$('.optionDiv select[name=cate]').empty();
+			$.get(baseURL+'/manager/category/findAllCategory',function(res){
+				res.data.forEach(function(item){
+					var $option=$('<option value="'+item.id+'">'+item.name+'</option>');
+					$('.optionDiv select[name=cate]').append($option);
+				});
+				currentCId=res.data[0].id;
+			  console.log(currentCId,'默认');
+				loadData(currentCId);
+			});
+		}
+		//栏目变化时，下面显示的信息也变化
+		$('select[name=cate]').change(function(){
+			var cid=$(this).val();
+			currentCId=cid;
+			console.log(currentCId,'变化');
+			loadData(cid);
+		});
+		//通过栏目信息来加载文章id
+		function loadData(cateid){
+			$('#info table tr:not(:first)').remove();
+			var obj={
+				page:20,
+				pageSize:18,
+				categoryId:cateid
+			};
+			$.get(baseURL+'/manager/article/findArticle',obj,function(res){
+				// console.log(res);
+				if(res.status==200){
+					 articles=[];
+					if(res.data){
+						articles=res.data.list;
+					}
+					articles.forEach(function(item){
+						var $tr=$(`<tr>
+							 		<td>
+							 			<input type="checkbox" value="`+item.id+`">
+							 		</td>
+							 		<td>`+item.title+`</td>
+							 		<td>`+item.category.name+`</td>
+							 		<td>`+item.liststyle+`</td>
+							 		<td>`+(item.author?item.author:'-')+`</td>
+							 		<td>`+item.publishtime+`</td>
+							 		<td>`+item.readtimes+`</td>
+							 		<td>
+							 			<i class="iconfont icon-edit-1-copy" title="修改"></i>
+										<i class="iconfont icon-shanchu" title="删除"></i>
+							 		</td>
+							 	</tr>`);
+						$('#info table').append($tr);
+					});
+				}else{
+					alert('加载失败');
+					console.log(res.message);
+				}
+			});
+		}
+		//添加
+		$('.addbtn').click(function(){
+			$('button[type=reset]').trigger('click');
+			$('.messageSpan').html('');
+			addOption(currentCId);
+		});
+		function addOption(CId){
+			//查找栏目，追加option，在显示模态框
+			//一涉及到追加就涉及到清空
+ 			//防止选项卡不断重复
+			$('select[name=category]').empty();
+			//显示出所有选项卡的内容option，为了便于我们设置select显示的默认值
+			$.get(baseURL+'/manager/category/findAllCategory',function(res){
+					res.data.forEach(function(item){
+						var $option=$('<option value="'+item.id+'">'+item.name+'</option>');
+						$('select[name=category]').append($option);
+					});
+					//设置模态框中select的默认值
+					//修改的时候也要变化
+         //这句话的意思就是：给selec设置value值，也就是设置select选项的默认选择值，前提是要有选项卡；
+				$('select[name=category]').val(CId);
+				console.log($('select[name=category]').val());
+		  	$('.modal').show();
+			});
+		}
+		//修改
+		//删除单个,因为之前我们所创建的td节点并没有加载到文档中，因此我们会获取不到数据，解决方法就是运用事件代理
+			$('table').on({
+ 				click:function(){
+		     	option=true;
+ 				artid=$(this).closest('tr').find('input[type=checkbox]').val();
+ 					console.log('当前需要修改的id',artid);
+ 					console.log(articles);
+ 					map=articles.filter(function(item){
+                      return item.id==artid      
+ 					});
+ 					console.log(map,'修改map');
+ 					$('input[name=title]').val(map[0].title);
+ 					// $('select[name=category]').val(map[0].category.name);
+ 					// $('input[name=infoList]').val(map[0].liststyle);
+ 					$('textarea[name=infoContent]').val(map[0].content);
+ 					if(map[0].liststyle=='style-one'){
+ 							$('#style-one').prop('checked','true');
+ 					}else if(map[0].liststyle=='style-two'){
+ 							$('#style-two').prop('checked','true');
+ 					}
+ 					addOption(currentCId);
+ 				}
+		},'i[title=修改]');
+		$('.backdiv').click(function(){
+			$('.modal').hide();
+		});
+		//保存
+		$('.savebtn').click(function(){
+            savedata(option);
+		});
+		function savedata(option){
+			    var infotitle=$('input[name=title]').val();
+		        var infocategory=$('select[name=category]').val();
+		        console.log(infocategory,'栏目id');
+		        //radio和checkbox都是先选中再拿值
+		        var inforadio=$('input[name=infoList]:checked').val();
+		        var infoContent=$('textarea[name=infoContent]').val();
+		       if(infotitle&&inforadio&&infoContent&&infocategory){
+		       	 var obj={
+		            title:infotitle,
+		            liststyle:inforadio,
+		            categoryId:infocategory,
+		            content:infoContent
+		        };
+		        //应该要在向后台发送请求之前判断是否添加文章id,因此修改该文章内容，注意区别文章id和栏目id的区别，可以到网络中查看发送给后台的数据
+		        if(option){
+		            obj.id=artid;
+		            obj.publishtime=map[0].publishtime;
+		            obj.readtimes=map[0].readtimes;
+		        	}
+		        $.post(baseURL+'/manager/article/saveOrUpdateArticle',obj,function(res){
+		        	if(res.status==200){
+		        		//修改的时候我需要添加一个当前选中的id,到后台去修改他，但是新增和修改用到是同一个接口，因此我们需要通过一个变量去判断他
+		        			console.log(artid);
+		        			alert('发布成功');
+		        			loadData(currentCId);
+					        $('.modal').hide();
+		        	}else{
+		              alert('发布失败');
+		              console.log('错误信息:',res);
+		        	}
+		        });
+		       }else{
+		       $('.messageSpan').html('信息未填写完整');
+		       }
+		}
+		//单个删除
+		$('table').on({
+ 				click:function(){
+ 					var id=$(this).closest('tr').find('input[type=checkbox]').val();
+ 					var obj={
+ 						id:id
+ 					};
+ 					$.get(baseURL+'/manager/article/deleteArticleById',obj,function(res){
+ 						if(res.status==200){
+ 							alert('删除成功');
+ 							//为了可以重新回到当前栏目下的文章信息
+ 							loadData(currentCId);
+ 						}else{
+ 							alert('删除成功');
+              console.log('错误信息:',res.message)
+ 						}
+ 					})
+ 				}
+		},'i[title=删除]');
+		//批量删除
+		$('.delbtn').click(function(){
+			//获取用户选中的多个checkbox,后台要的数据是{ids:'1,2,3,4'}
+			var ids=$('input[type=checkbox]:checked').map(function(index,item){
+				//item是指一个个dom节点
+                   return item.value
+			});
+			//ids是jQuery的一个实例
+			console.log(ids instanceof jQuery);
+			ids=ids.get().toString();
+			// console.log(ids);
+			var obj={
+					ids:ids
+			};
+			$.post(baseURL+'/manager/article/batchDeleteArticle',obj,function(res){
+					if(res.status==200){
+ 							alert('删除成功');
+ 							//为了可以重新回到当前栏目下的文章信息
+ 							loadData(currentCId);
+ 						}else{
+ 							alert('删除成功');
+              console.log('错误信息:',res.message)
+ 						}
+			});
+		});
+		//获得当前修改时间
+		function currentdate(){
+			
+		}
+	})
+</script>
+<style>
+	#info{
+		background-color:white;
+		padding: 10px;
+	}
+	.optionDiv{
+	  overflow:auto;
+	}
+	.optionDiv *{
+		float: left;
+		margin-right: 10px;
+	}
+	.optionDiv select{
+		width: 200px;
+		height: 29px;
+	}
+	#info table{
+		margin-top: 10px;
+		cursor: pointer;
+	}
+	#info table i{
+		color: #63b919;
+	}
+	#info table i:nth-child(2){
+		color: red;
+	}
+	.backdiv{
+		cursor: pointer;
+		float: left;
+	}
+	.modal-dialog{
+		width: 1135px;
+		margin-left:232px;
+		margin-top: 0;
+	}
+	.modal-body img{
+		width:200px;
+		height: 100px; 
+	}
+	.modal-body img:nth-child(2){
+		margin-left: 20px
+	}
+	.messageSpan{
+		color: red;
+		font-size: 24px;
+	}
+</style>

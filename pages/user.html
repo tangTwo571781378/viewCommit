@@ -1,0 +1,303 @@
+ <div id="user">
+    <div class="outerDiv bg-white">
+    	<button class="btn btn-sm btn-success">新 增</button>
+	    <div class="row marginTop">
+	    <!-- 放的是一个个的缩略图 -->
+	    	<div class="col-sm-4">
+			    <div class="thumbnail ">
+			      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514093920321&di=913e88c23f382933ef430024afd9128a&imgtype=0&src=http%3A%2F%2Fp.3761.com%2Fpic%2F9771429316733.jpg" alt="图片找不到" class="img-circle" style="width:150px;height:150px">
+			      <div class="caption">
+			      		<div class="row">
+				        	<div class="col-sm-4 col-sm-offset-1">用户名</div>
+				        	<div class="col-sm-7">qiaomeili</div>
+				        </div>
+				        <div class="row">
+				        	<div class="col-sm-4 col-sm-offset-1">真实姓名</div>
+				        	<div class="col-sm-7">乔美丽</div>
+				        </div>
+				        <div class="row">
+				        	<div class="col-sm-4 col-sm-offset-1">注册时间</div>
+				        	<div class="col-sm-7">2018-9-27</div>
+				        </div>
+				        <div class="row">
+				        	<div class="col-sm-4 col-sm-offset-1">email</div>
+				        	<div class="col-sm-7">qiaomeili@qq.com</div>
+				        </div>
+				        <div class="row">
+				        	<div class="col-sm-4 col-sm-offset-1">状态</div>
+				        	<div class="col-sm-7">
+				        	<!-- 用户的id值，当状态发生改变后，我们将用户的id值以及相关状态传送给后台 -->
+				        		<input type="hidden" value="1001">
+				        		<div class="switch">
+				        			<input type="checkbox">
+				        		</div>
+				        	</div>
+				        </div>
+			       </div>
+	            </div>
+	        </div>
+	    </div>
+	 <!--注意：如果你的模态框出来的话，整个界面都是modal这个类的范围 ；
+	 modal-content这个范围就是我们显示出来可以看到的内容的范围；
+	 modal-dialog这个类包裹content，因此我们移动dialog的位置就可以改变模态框的位置；
+	 又因为content是dialog的子元素，因此dialog的高度是由content子元素撑起来的，因此是要对content设置高度，对宽度的设置是在dialog上，因为父元素之前是有宽度的-->
+		<div class="modal" id="mymodal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header text-center">
+						<div class="btndiv">
+							<span><i class="iconfont icon-zuo"> </i> 返回</span>
+						</div>
+	    				<div class="modal-title ">
+				            <span>添加用户</span>
+	    				</div>
+		    		</div>
+		    		<div class="modal-body">
+		    		<!--表单-->
+		    			<form>
+		    				<div class="form-group">
+		    					<label for="username">用户名</label>
+		    					<br>
+		    					<input type="text" name="user" id="username" class="form-control" value="">
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="psw">密码</label>
+		    					<br>
+		    					<input type="password" name="psw" id="psw" class="form-control" value="">
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="pswtoo">重复密码</label>
+		    					<br>
+		    					<input type="password" name="pswtoo" id="pswtoo" class="form-control" value="">
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="realname">真实姓名</label>
+		    					<br>
+		    					<input type="text" name="realname" id="realname" class="form-control" value="">
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="email">email</label>
+		    					<br>
+		    					<input type="email" name="email" id="email" class="form-control" value="">
+		    				</div>
+		    				<!-- hide这个类是隐藏的作用 -->
+		    				<div class="form-group hide">
+		    					<button type="reset">重置</button>
+		    				</div>
+		    			</form>
+		    		</div>
+		    		<div class="modal-footer">
+		    		    <span class="messageSpan"></span>
+						<button class="btn btn-sm btn-success saveBtn">确 定</button>
+		    		</div>
+				</div>
+			</div>
+		</div>
+		<!-- 警告框 -->
+		<div class="alertDiv">
+			<div class="alert alert-success text-center">
+				<strong>提示：</strong>
+				<br>
+				<br>
+				<span>注册成功</span>
+			</div>
+		</div>
+    </div>
+</div>
+<style>
+#user{
+	width: 98%;
+	margin:0 auto;
+}
+ .marginTop{
+ 	margin-top: 10px
+ }
+ .thumbnail{
+ 	box-shadow: 3px 3px 3px #ccc;
+ 	font-size: 20px;
+ 	line-height: 40px;
+ }
+.outerDiv{
+	padding: 15px 10px;
+	border-radius: 5px;
+}
+input{
+	/*除去type取值为number时中的下拉选项*/
+	-moz-appearance:textfield;
+	 -webkit-appearance: none ;
+}
+.bg-white{
+	background-color: white;
+}
+.outerDiv .tianjia{
+	width:70px;
+	padding: 5px 10px;
+	text-align: center;
+	border-radius: 5px;
+	color: white;
+	border: none;
+}
+#mymodal{
+	/*设置背景色*/
+	 background-color:rgba(0,0,0,0.3);
+}
+.modal-dialog{
+	/*设置位置*/
+	 margin-right: 0;
+	 margin-top: 0;
+	 width: 350px;
+}
+.modal-header>.btndiv{
+	float: left;
+	margin-left: 5px;
+	background-color: red;
+	cursor: pointer;
+}
+.messageSpan{
+	color: red;
+}
+.alertDiv{
+	width: 300px;
+	position: absolute;
+	top:50%;
+	margin-top: -150px;
+	margin-right: -150px;
+	right:50%;
+	display: none;
+}
+</style>
+<script>
+$(function(){
+//复选按钮的初始化,设置值，仅在于当前界面
+		// $('#user input[type=checkbox]').bootstrapSwitch('state',false);
+		$("#user").on({
+			// 事件名称：当开关按钮的状态发生改变时才会触发该事件
+			'switchChange.bootstrapSwitch':function (event,state) {
+				// state为改变后的状态
+		          // alert(state);
+		          // 点击修改之后，向后台传递参数
+		          //this---->input checkbox元素
+		          //查找id
+		          var id = $(this).closest('.switch').prev('input').val();
+		          //封装给后台的数据，根据后台的属性名来写对象的属性名。属性值是前端这边来获取的。
+		          var obj = {
+		          	id:id,
+		          	status:state
+		          };
+		          // 开始的时候就会执行一次，因为设置了值
+		          $.post(baseURL+'/manager/user/changeStatus ',obj,function(res){
+		          	console.log('执行成功',res);
+		          	
+		          });
+		      }
+		},'[type=checkbox]');
+		loadData();
+		//获取数据：我们就要想到前后台交互，可以用ajax技术，考虑：第一要知道url路径，第二要知道请求方式，第三要知道要不要参数，四要知道返回值
+		//封装的思想便于我们调用
+		function loadData(){
+			//清空数据
+			$('.marginTop').empty();
+			$.get(baseURL+'/manager/user/findAllUser',function(res){
+					console.log(res.data);
+					//遍历数据，循环创建缩略图
+					res.data.forEach(function(item,index){
+						// 三目运算符
+						// ''单引号是不可以有回车，但是``反引号可以有，因此变量时，用单引号就是单引号隔开，用反引号就用反引号隔开
+						var $thm=$(`<div class="col-sm-4">
+									  	<div class="thumbnail ">
+											<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514093920321&di=913e88c23f382933ef430024afd9128a&imgtype=0&src=http%3A%2F%2Fp.3761.com%2Fpic%2F9771429316733.jpg" alt="图片找不到" class="img-circle" style="width:150px;height:150px">
+											<div class=" one">
+											    <div class="row">
+												   <div class="col-sm-4 col-sm-offset-1">用户名</div>
+												   <div class="col-sm-7">`+(item.username?item.username:'-')+`</div>
+											   </div>
+											   <div class="row">
+												   <div class="col-sm-4 col-sm-offset-1">真实姓名</div>
+												    <div class="col-sm-7">`+(item.nickname?item.nickname:'-')+`</div>
+											    </div>
+											   <div class="row">
+											        <div class="col-sm-4 col-sm-offset-1">注册时间</div>
+											        <div class="col-sm-7">`+(item.regTime?item.regTime:'-')+`</div>
+											    </div>
+											    <div class="row">
+											        <div class="col-sm-4 col-sm-offset-1">email</div>
+											        <div class="col-sm-7">`+(item.email?item.email:'-')+`</div>
+											    </div>
+											    <div class="row">
+											         <div class="col-sm-4 col-sm-offset-1">状态</div>
+											         <div class="col-sm-7">
+											         	<input type="hidden" value="`+(item.id?item.id:'-')+`">
+												         <div class="switch">
+												         	<input type="checkbox">
+												         </div>
+												     </div>
+											    </div>
+										 	</div>
+										</div>
+									</div>`);
+						// console.log($thm);
+						//追加节点
+						$('.marginTop').append($thm);
+						//在这里控制状态
+						$('#user input[type=checkbox]:last').bootstrapSwitch('state',item.enabled)
+					})
+			})
+		}
+	//绑定新增事件
+	console.log($('.col-sm-4'));
+	$('.outerDiv>.btn').click(function(){
+		//先清空表单数据,再显示模态框
+		//清空表单数据是通过button type=reset，加上hide这个类表示隐藏，通过模拟点击事件，触发清空表单
+		//模拟点击事件：包括元素的默认行为以及我们自己设置的点击事件，比如重置按钮默认需要点击之后才可以清空input框中的内容，因此如果我们对这个按钮绑定模拟点击事件的后就是指元素本身的默认行为，也就是点击后清空内容；如果我们只是给普通的div元素绑定模拟点击事件，就是指我们自己设置的点击事件，因为该元素没有默认行为
+			$('.messageSpan').html('');
+		    $('button[type=reset]').trigger('click');
+			$('#mymodal').show();
+	});
+	$('.btndiv').click(function(){
+			$('#mymodal').hide();
+	});
+	//设置为视口的高度
+	$('.modal-content').height($(window).height());	
+	//确认按钮的事件:
+	//获取input中的内容，进行简单的表单验证，提示信息或者提交成功
+	$('.saveBtn').click(function(){
+		//input的内容：name=value(我们在框中填写的内容)
+		var username=$('input[name=user]').val();
+		var psw=$('input[name=psw]').val();
+		var pswtoo=$('input[name=pswtoo]').val();
+		var realname=$('input[name=realname]').val();
+		var email=$('input[name=email]').val();
+		var message='';
+		if( username&&psw&&pswtoo&&realname&&email){
+			if(psw==pswtoo){
+				//提交数据给后台
+				//前面的属性名是后台规定好的，后台所需要的数据，后面的属性值是我们自己获取的value值，后台规定了接受的数据类型是对象，也规定了我们如果想要对数据进行操作需要传什么样子的数据，发送什么类型的请求，但是请求成功后的具体操作是要看后台内部进行，我们并不知道
+				var obj={
+					username:username,
+					password:psw,
+					nickname:realname,
+					email:email
+				};
+				$.post(baseURL+'/manager/user/saveOrUpdateUser',obj,function(res){
+					// 刷新页面，关闭模态框，提示用户保存成功
+					console.log('保存成功');
+					loadData();
+					$('#mymodal').hide();
+					//animate动画的使用：添加基本类animated  再添加动画样式类slideInRight
+     $('.alertDiv').addClass('animated slideInRight');
+     $('.alertDiv').show();
+     setTimeout(function(){
+     	$('.alertDiv').fadeOut(3000);
+     },2000);
+				})
+			}else{
+				message='两次密码输入不一致';
+			}
+		}else{
+			message='空信息不可以提交';
+		}
+		$('.messageSpan').html(message);
+		// $('.messageSpan').text(message);
+	});
+})
+</script>

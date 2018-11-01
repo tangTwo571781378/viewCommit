@@ -1,0 +1,255 @@
+<div id="category">
+	<button class="btn btn-sm btn-success addbtn">新 增</button>
+   <button class="btn btn-sm btn-success removebtn">批量 删除</button>
+	<table class="table table-bordered text-center">
+		<tr>
+		  <td>编号</td>
+		  <td>栏目名称</td>
+		  <td>父栏目</td>
+		  <td>栏目描述</td>
+		  <td>操作</td>
+		</tr>
+		<!-- <tr>
+			<td>
+				<input type="checkbox" value="">
+			</td>
+			<td>name</td>
+			<td>parent</td>
+			<td>comment</td>
+			<td>
+				<i class="iconfont icon-edit-1-copy" title="修改"></i>
+				<i class="iconfont icon-shanchu" title="删除"></i>
+			</td>
+		</tr> -->
+	</table>
+	<!--  模态框 -->
+	<div class="modal" id="cateModal">
+    	<div class="modal-dialog" >
+    		<div class="modal-content">
+    			<div class="modal-header text-center">
+    				<div class="backDiv">
+    					<i class="iconfont icon-zuo"></i>
+    					<span>返回</span>
+    				</div>
+    				<div class="modal-title">添加栏目</div>
+    			</div>
+    			<div class="modal-body">
+    				<form action="	">
+    					<div class="form-group">
+    							<label for="categoryName">栏目名称</label>	
+    							<input type="text" class="form-control" name="categoryName">
+    					</div>
+    					<div class="form-group">
+    							<label for="categoryParent">父栏目</label>	
+    							<select class="form-control" name="categoryParent">
+    								<option value="	">请选择</option>
+    								<!-- 需要获取所有的父栏目，追加节点 -->
+    							</select>
+    					</div>
+    					<div class="form-group">
+    							<label for="categoryComment">描述</label>
+    							<!--cols是列，row是行  -->
+    							<textarea class="form-control" name="categoryComment" cols="30" rows="5"></textarea>
+    					</div>
+						<div class="form-group hide">	
+							<button type="reset">重置</button>
+						</div>
+    				</form>
+    			</div>
+    			<div class="modal-footer">
+    				<span class="messageSpan"></span>
+    				<button class="btn btn-success btn-sm savebtn ">提 交</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>	
+</div>
+<script>
+//封装的思想
+	$(function(){
+		var categories;
+		//当前修改的栏目id,在保存的时候需要他，但是在点击修改的时候获取
+		var currentId='';
+		//判断是新增还是修改
+		var option;
+		//设置模态框的高度为视口区的高度
+		$('.modal-content').height($(window).height());
+		//新增
+		$('.addbtn').click(function(){
+			// 清空模态框的内容，清空提示span的内容，获取所有的父栏目，追加select中的option，模态框显示
+			   option='新增';
+				$('button[type=reset]').trigger('click');
+				$('messageSpan').html('');
+				addOption();
+		});
+		//返回
+		$('.backDiv').click(function(){
+			$('#cateModal').hide();
+		});
+		//保存
+		$('.savebtn').click(function(){
+				var categoryName=$('input[name=categoryName]').val();
+				var categoryParent=$('select[name=categoryParent]').val();
+				var categoryComment=$('textarea[name=categoryComment]').val();
+				if(categoryName&&categoryComment){
+						//保存
+					var obj={
+						name:categoryName,
+						comment:categoryComment,
+						no:'',
+						parentId:categoryParent
+					};
+					if(option=='修改'){
+						obj.id=currentId;
+					}
+					$.post(baseURL+'/manager/category/saveOrUpdateCategory ',obj,function(res){
+							alert('保存成功');
+							console.log(res,'保存或更新成功');
+							loadData();
+							$('#cateModal').hide();
+					});
+
+				}
+		});
+		//修改
+		$('#category table').on({
+				click:function(){
+					 option='修改';
+					 	// 获取对应的id,通过id获取对应的对象，将对象的数据设置到模态框中，在显示模态框之前，先追加option,设置select的值。显示模态框。
+					currentId=$(this).closest('tr').find('[type=checkbox]').val();
+				     var cat=categories.filter(function(item){
+				     	 		return item.id==currentId
+				     })[0];
+				     console.log(categories);
+				     $('input[name=categoryName]').val(cat.name);
+				      $('textarea[name=categoryComment]').val(cat.comment);
+						 addOption(function(){
+						 	//''空字符串就是请选择
+						 	// console.log(cat.parent);
+						 		$('select[name=categoryParent]').val(cat.parent?cat.parent.id:'');
+						 });
+
+				}
+		},'[title=修改]');
+		//单个删除：注意当该栏目是别的栏目的父级栏目时是不可以被删除的
+		$('#category table').on({
+			// 通过删除图标，选中id,传给后台
+				click:function(){
+					var id=$(this).closest('tr').find('[type=checkbox]').val();
+					 var obj={
+						 id:id
+					   };
+				    console.log(obj);
+				    $.get(baseURL+'/manager/category/deleteCategoryById',obj,function(res){
+				    	//没有执行失败的函数这个参数，因此我加上去是错误的，我们传给后台的数据，该后台已经确定了传送类型是对象，因此我们在这个环境下是对象，其他传给后台的数据就要看后台的规定，因此我们需要在执行成功中判断后台数据给我们的返回值中的状态是否确定删除成功？
+				          console.log(res);
+				    			if(res.status==200){
+				    				loadData();
+				    			  alert('删除成功');
+				    			}else{
+						        console.log(res.message);
+				    			  alert('删除失败');
+				    			}
+				    });
+
+				}
+		},'[title=删除]');
+		//批量删除
+		$('.removebtn').click(function(){
+			//获取用户选中的多个checkbox,并且拿到用户选择的checkbox的id，后台要的数据是{ids:'1,2,3,4'}
+			//将jQuery对象转化为数组
+			var ids=$('input[type=checkbox]:checked').map(function(index,item){
+					return $(item).val()
+			}).get();
+			console.log(ids);
+			var obj={
+					ids:ids.toString()
+			};
+			//批量删除，要删除成功就一起删除掉，如果失败就都不会删除掉
+			$.post(baseURL+'/manager/category/batchDeleteCategory',obj,function(res){
+				if(res.status==200){
+				    alert('批量删除成功');
+            loadData();
+          }else{
+            console.log(res.message);
+				    	alert('批量删除失败');
+          }  
+			});
+		});
+		// 加载数据
+		loadData();
+		function loadData(){
+			//删除除第一个tr元素之外的tr标签
+			$('#category table tr:not(:first)').remove();
+			$.get(baseURL+'/manager/category/findAllCategory ',function(res){
+				// 将数据赋值给全局变量，可以用来筛选
+				categories=res.data;
+				res.data.forEach(function(item,index){
+					//``是代表可以换行，里面的代码有效
+					var $tr=$(`
+						<tr>
+							<td>
+								<input type="checkbox" value="`+item.id+`">
+							</td>
+							<td>`+item.name+`</td>
+							<td>`+(item.parent?item.parent.name:'无')+`</td>
+							<td>`+(item.comment?item.comment:'无')+`</td>
+							<td>
+								<i class="iconfont icon-edit-1-copy" title="修改"></i>
+								<i class="iconfont icon-shanchu" title="删除"></i>
+							</td>
+						</tr>`
+						);
+					$('#category table').append($tr);
+				})
+			});
+		}
+		//因为新增和修改都会需要同一个模态框，因此我们可以把这段代码提取出来封装成为一个函数
+		// 追加option,显示模态框
+		function addOption(handle){
+			$('#category select option:not(:first)').remove();
+			$.get(baseURL+'/manager/category/findAllCategory ',function(res){
+				// 过滤出来没有父亲的栏目，他就是父栏目，拿所有的一级栏目，给他追加子栏目
+				/*过滤栏目：var parents = res.data.filter(function(item){
+					return !item.parent;//当条件为真的才会过滤出来
+				});*/
+				var parent=res.data;
+				parent.forEach(function(item){
+					var $option=$('<option value="'+item.id+'">'+item.name+'</option>');
+					$('#category select').append($option);
+				});
+				if(handle){
+					handle();
+				}
+				$('#cateModal').show();
+			});
+		}
+	})
+</script>
+<style>
+	#category{
+		padding: 10px;
+		background-color: white;
+	}
+	#category table{
+		margin-top: 10px;
+	}
+	#category table i{
+		color: #63b919;
+	}
+	#category table i:nth-child(2){
+		color: red;
+	}
+	#cateModal{
+		background-color: rgba(0,0,0,0.3);
+	}
+	.modal-dialog{
+		width: 300px;
+		margin-right: 0;
+		margin-top: 0;
+	}
+	.backDiv{
+		float: left;
+		cursor: pointer;
+	}
+</style>
